@@ -1,0 +1,48 @@
+O<probe-z-minus> SUB
+
+( Filename: z-probe.ngc )
+
+( LinuxCNC Manual Tool-Change Subroutines for Milling Machines version 1.1: subroutine 2/2 )
+( Intended to be run as a remapped M600 command. Used to indicate that the next tool change, M6, is the first tool of a job. )
+
+
+
+M70                                            ( save current modal state )
+
+#<z_pos_start> = #5422          (startposition merken)
+
+
+M9                                             ( turn off coolant, will be restored on return if it was on )
+M5                                             ( turn off spindle, cannot be on during the probe )
+G21                                             ( use millimeters as required here, units will be restored on return )
+G49                                            ( clear tool length compensation )
+
+G94                                            ( use feedrate in units/min )
+G40 
+G91                                            ( use increment positioning here )
+
+
+G38.2 F200 Z-30     (schnelles antasten)
+G1 F3000 Z2         (2mm zurueckziehen)
+G38.2 F50 Z-4      (langsames antasten)
+
+o101 if [#5070 EQ 0]
+    G90                 (absolute positionierung)
+    G1 F3000 Z#<z_pos_start> (Auf Ursprung zurückfahren)
+    M72
+o101 else
+
+    G90                 (absolute positionierung)
+    G1 F3000 Z#<z_pos_start> (Auf Ursprung zurückfahren)
+
+    G10 L20 P0 Z[#5422-#5063+#<_hal[pyvcp.probe.tastplatte]>]    (Z-achse nullen, staerke der Tastplatte eintragen)
+
+
+    M72
+    G49                                          ( clear tool length compensation )
+    #<_ToolDidFirst> = 0                         ( new job, we haven't yet called <tool-change> for the first time )
+
+o101 endif
+
+O<probe-z-minus> ENDSUB
+M2

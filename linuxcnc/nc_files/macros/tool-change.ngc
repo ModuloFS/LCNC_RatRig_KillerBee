@@ -1,0 +1,100 @@
+O<tool-change> SUB
+
+O160 IF [ #<_task> GT 0.0 ]
+
+  (------------------------------- CONFIGURATION PARAMETERS ----------------------------------------------)
+  #<_TravelZ> =         89.0     ( machine Z coordinate for travelling, typically near max Z to avoid ever hitting the work )
+
+  #<_ProbeX> =          17.0    ( machine X coordinate of switch/touch-off plate )
+  #<_ProbeY> =          733.5     ( machine Y coordinate of switch/touch-off plate )
+
+
+  #<_ProbeRetract> =      1.0     ( small distance to retract before approaching switch/touch-off plate second time )
+
+  #<_ProbeFeed1> =       300.0     ( feed rate for touching switch/touch-off plate first time )
+  #<_ProbeFeed2> =        30.0     ( feed rate for touching switch/touch-off plate second time )
+  #<_ToolChangeX> =       250.0     ( machine X coordinate to pause at for manual tool changing )
+  #<_ToolChangeY> =       100.0     ( machine Y coordinate to pause at for manual tool changing )
+  (-------------------------------------------------------------------------------------------------------)
+
+
+  O170 IF [ EXISTS[#<_ToolDidFirst>] EQ 0 ]
+
+          (debug, EINMESSEN VERGESSEN!!)
+          O<tool-change> ENDSUB
+  O170 ENDIF
+  O180 IF [ #<_ToolDidFirst> EQ 0 ]               (erstes tool, dann initialisieren)
+    G49                                         ( clear tool length compensation prior to saving state if this is first time )
+          #<_ToolZRef> = 0                       ( Ensures values are cleared if M600 is not called ) 
+          #<_ToolZ> = 0
+          #<_ToolZLast> = 0
+
+  O180 ENDIF
+
+
+  M70                                            ( save current modal state )
+
+  M9                                             ( turn off coolant, will be restored on return if it was on )
+  M5                                             ( turn off spindle, cannot be on during the probe )
+  G21                                             ( use millimeters as required here, units will be restored on return )
+  G30.1                                          ( save current position in #5181-#5183... )
+  G49                                            ( clear tool length compensation )
+  G90                                            ( use absolute positioning here )
+  G94                                            ( use feedrate in units/min )
+  G40                                            ( turn cutter radius compensation off here )
+
+
+
+  O190 IF [ #<_ToolDidFirst> GT 0  ] (Wenn wir nicht mehr beim ersten tool sind müssen wir wechseln)
+
+    G53 G0 Z[#<_TravelZ>]
+    G53 G0 X[#<_ToolChangeX>] Y[#<_ToolChangeY>]  ( Moves to desired potion for manual tool change )
+    M6                                             ( do the normal M6 stuff )
+
+  O190 ENDIF
+
+
+  O200 IF [ #<_ToolDidFirst> EQ 0 ]               (erstes Antasten hier muss die hoehe des Tasters vermessen werden)
+    G53 G0 Z[#<_TravelZ>]      ( go to high travel level on Z )
+    G53 G0 X[#<_ProbeX>] Y[#<_ProbeY>]           ( to probe switch )
+
+    G91                                       ( use relative positioning )
+    G38.2 Z-70 F[#<_ProbeFeed1>]                  ( trip switch slowly )
+    G0 Z[#<_ProbeRetract>]                       ( go up slightly )
+    G38.2 Z[-#<_ProbeRetract>-2] F[#<_ProbeFeed2>]   ( trip switch very slowly )
+    G90                                          ( use absolute positioning )
+    #<_ToolZRef> = #5063                         ( save trip point )
+    #<_ToolZLast> = #<_ToolZRef>                 ( save last tool Z position )
+    G53 G0 Z[#<_TravelZ>]      ( return to safe level )
+    G53 G0 X[#5181] Y[#5182]                     ( return to where we were in X Y)
+
+    M72                                          ( restore modal state )
+    #<_ToolDidFirst> = 1                         ( we have been in this section to set reference value already )
+  O200 ELSE
+    G53 G0 Z[#<_TravelZ>]      ( go to high travel level on Z )
+    G53 G0 X[#<_ProbeX>] Y[#<_ProbeY>]           ( to high place directly over switch )
+
+    G91                                           ( use relative positioning )
+    G38.2 Z-70 F[#<_ProbeFeed1>]     ( trip switch slowly )
+    G0 Z[#<_ProbeRetract>]                       ( go up slightly )
+    G38.2 Z[-#<_ProbeRetract>-2] F[#<_ProbeFeed2>]   ( trip switch very slowly )
+    G90                                          ( use absolute positioning )
+    #<_ToolZ> = #5063                            ( save new tool length )
+
+    G53 G0 Z[#<_TravelZ>]      ( return to high travel level )
+    G53 G0 X[#5181] Y[#5182]                     ( return to where we were in X Y)
+    #<_ToolZLast> = #<_ToolZ>                    ( save last tool length )
+    
+    M72                                          ( restore modal state )
+    G43.1 Z[#<_ToolZ> - #<_ToolZRef>]            ( Apply offset to Z height after Modal reset )
+    
+  O200 ENDIF
+
+O160 ELSE
+
+  M6
+
+O160 ENDIF
+
+O<tool-change> ENDSUB
+M2

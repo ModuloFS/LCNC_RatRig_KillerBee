@@ -1,0 +1,432 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<pyvcp>
+        <tabs>
+
+                <names>["DRO", "Spindel", "Probe", "Inputs"]</names>
+                <!-- DRO Tab -->
+                <vbox>
+
+                        <!-- Bereich Arbeisposition -->
+                        <labelframe font="Helvetica, 18" text="Arbeitsposition">
+
+                                <labelframe font="Helvetica, 22" text="X1">
+
+                                        <number>
+                                                <halpin>"dro.workx"</halpin>
+                                                <font>("Terminal",28)</font>
+                                                <fg>"green4"</fg>
+                                                <format>"3.3f mm"</format>
+                                        </number>
+
+                                </labelframe>
+
+                                <labelframe font="Helvetica, 22" text="Y1">
+
+                                        <number>
+                                                <halpin>"dro.worky"</halpin>
+                                                <font>("Terminal",28)</font>
+                                                <fg>"green4"</fg>
+                                                <format>"3.3f mm"</format>
+                                        </number>
+
+                                </labelframe>
+
+                                <labelframe font="Helvetica, 22" text="Z1">
+
+                                        <number>
+                                                <halpin>"dro.workz"</halpin>
+                                                <font>("Terminal",28)</font>
+                                                <fg>"green4"</fg>
+                                                <format>"3.3f mm"</format>
+                                        </number>
+
+                                </labelframe>
+
+                        </labelframe>
+
+                        <!-- Platzhalter -->
+                        <label font="Helvetica, 4" text=" " />
+
+                        <!-- Bereich Maschinenposition -->
+                        <labelframe font="Helvetica, 18" text="Maschinenposition">
+
+                                <labelframe font="Helvetica, 22" text="X">
+
+                                        <number>
+                                                <halpin>"dro.machinex"</halpin>
+                                                <font>("Terminal",28)</font>
+                                                <format>"3.3f mm"</format>
+                                        </number>
+
+                                </labelframe>
+
+                                <labelframe font="Helvetica, 22" text="Y">
+
+                                        <number>
+                                                <halpin>"dro.machiney"</halpin>
+                                                <font>("Terminal",28)</font>
+                                                <format>"3.3f mm"</format>
+                                        </number>
+
+                                </labelframe>
+
+                                <labelframe font="Helvetica, 22" text="Z">
+
+                                        <number>
+                                                <halpin>"dro.machinez"</halpin>
+                                                <font>("Terminal",28)</font>
+                                                <format>"3.3f mm"</format>
+                                        </number>
+
+                                </labelframe>
+
+                        </labelframe>
+
+                        <!-- Platzhalter -->
+                        <label font="Helvetica, 4" text=" " />
+
+                        <!-- Bereich Vorschub -->
+                        <labelframe font="Helvetica, 16" text="Vorschub">
+
+                                <number>
+                                        <halpin>"dro.vorschub"</halpin>
+                                        <font>("Terminal",24)</font>
+                                        <format>"4.1f mm/s"</format>
+                                </number>
+
+                        </labelframe>
+
+                        <!-- Platzhalter -->
+                        <label font="Helvetica, 4" text=" " />
+
+                        <!-- Bereich Spindel -->
+                        <labelframe font="Helvetica, 16" text="Spindel">
+
+                                <labelframe font="Helvetica, 12" text="Drehzahl [rpm]">
+
+                                        <bar halpin="dro.spindeldrehzahl" min_="6000" max_="27500" canvas_width="312" canvas_height="39" bar_width="260" bar_height="20"/>
+
+                                </labelframe>
+
+                                <labelframe font="Helvetica, 12" text="Drehmoment [Nm]">
+
+                                        <bar halpin="dro.motordrehmoment" format=".3f" min_="0" max_="1.0" canvas_width="312" canvas_height="39" bar_width="260" bar_height="20"/>
+
+                                </labelframe>
+
+                        </labelframe>
+
+                </vbox>
+
+                <!-- Spindel Tab-->
+                <vbox>
+
+                        <labelframe font="Helvetica, 16" text="Motor">
+
+                                <labelframe text="Drehzal [rpm]">
+                                        <bar halpin="spindel.drehzahl" min_="6000" max_="27000" canvas_width="312" canvas_height="37" bar_width="260" bar_height="20"/>
+                                </labelframe>
+
+                                <labelframe text="Drehmoment [Nm]">
+                                        <bar halpin="spindel.drehmoment" format=".3f" min_="0" max_="1.0" canvas_width="312" canvas_height="37" bar_width="260" bar_height="20"/>
+                                </labelframe>
+
+                                <labelframe text="Solldrehzal">
+                                        <multilabel>
+                                                <legends>["nicht erreicht", "erreicht"]</legends>
+                                                <font>("Helvetica",14)</font>
+                                        </multilabel>
+                                </labelframe>
+
+                        </labelframe>
+
+                        <!-- Platzhalter -->
+                        <label font="Helvetica, 6" text=" " />
+
+                        <labelframe font="Helvetica, 16" text="Inverter">
+
+                                <labelframe text="Zwischenkreisspannung [V]">
+                                        <bar halpin="spindel.zwischenkreisspannung" format=".1f" min_="0" max_="400" canvas_width="312" canvas_height="37" bar_width="260" bar_height="20"/>
+                                </labelframe>
+
+                                <labelframe text="Temperatur [°C]">
+                                        <bar halpin="spindel.invertertemperature" format=".1f" min_="0" max_="100" canvas_width="312" canvas_height="37" bar_width="260" bar_height="20"/>
+                                </labelframe>
+
+                                <labelframe text="Ausgansspannung [V]">
+                                        <bar halpin="spindel.ausgangsspannung" format=".1f" min_="0" max_="250" canvas_width="312" canvas_height="37" bar_width="260" bar_height="20"/>
+                                </labelframe>
+
+                                <labelframe text="Ausgangsstrom [A]">
+                                        <bar halpin="spindel.ausgangsstrom" format=".3f" min_="0" max_="10" canvas_width="312" canvas_height="37" bar_width="260" bar_height="20"/>
+                                </labelframe>
+
+                                <labelframe text="Ausgangsleistung [kW]">
+                                        <bar halpin="spindel.ausgangsleistung" format=".3f" min_="0" max_="2.500" canvas_width="312" canvas_height="37" bar_width="260" bar_height="20"/>
+                                </labelframe>
+
+                                <labelframe text="Ausgangsfrequenz [Hz]">
+                                        <bar halpin="spindel.ausgangsfrequenz" format=".1f" min_="0" max_="500" canvas_width="312" canvas_height="37" bar_width="260" bar_height="20"/>
+                                </labelframe>
+
+                                <labelframe text="Störung">
+                                        <button halpin="spindel.stoerung_reset" text="RESET ↺"/>
+                                </labelframe>
+
+
+                        </labelframe>
+
+                        <!-- Platzhalter -->
+                        <label font="Helvetica, 6" text=" " />
+
+                        <labelframe font="Helvetica, 16" text="Kommunikation">
+                                <hbox>
+                                        <labelframe text="Status">
+                                                <multilabel>
+                                                        <legends>["getrennt", "verbunden"]</legends>
+                                                        <font>("Helvetica",12)</font>
+                                                </multilabel>
+                                        </labelframe>
+
+                                        <labelframe text="Fehlerzähler">
+                                                <s32 halpin="spindel.fehlerzaehler"/>
+                                        </labelframe>
+
+                                        <labelframe text="Letzter Fehler">
+                                                <s32 halpin="spindel.letzterfehler"/>
+                                        </labelframe>
+                                </hbox>
+
+                        </labelframe>
+
+                </vbox>
+
+                <!-- Probe Tab-->
+                <vbox>
+                        <labelframe text="Achse setzen [mm]" font="Helvetica, 16">
+
+                                <!-- Platzhalter -->
+                                <label font="Helvetica, 4" text=" " />
+
+                                <hbox>
+                                        <button halpin="probe.p0x_set" width="5" padx="11" text="P0 X:" font="Helvetica, 18" />
+                                        <button halpin="probe.p0y_set" width="5" padx="12" text="P0 Y:" font="Helvetica, 18" />
+                                        <button halpin="probe.p0z_set" width="5" padx="11" text="P0 Z:" font="Helvetica, 18" />
+                                </hbox>
+
+                                <hbox>
+                                        <label font="Helvetica, 6" text=" " />
+                                        <spinbox halpin="probe.p0x_os" width="6" font="Helvetica, 14" min_="-99" max_="99" initval="0.0" param_pin="1" format="3.3f"/>
+                                        <label font="Helvetica, 6" text="  " />
+                                        <spinbox halpin="probe.p0y_os" width="6" font="Helvetica, 14" min_="-99" max_="99" initval="0.0" param_pin="1" format="3.3f"/>
+                                        <label font="Helvetica, 6" text="   " />
+                                        <spinbox halpin="probe.p0z_os" width="6" font="Helvetica, 14" min_="-99" max_="99" initval="0.0" param_pin="1" format="3.3f"/>
+                                </hbox>
+                                <!-- Platzhalter -->
+                                <label font="Helvetica, 4" text=" " />
+
+                        </labelframe>
+
+                        <label font="Helvetica, 4" text=" " />
+
+                        <labelframe text="Eigenschaften Taster" font="Helvetica, 16">
+
+                                <!-- Platzhalter -->
+                                <label font="Helvetica, 4" text=" " />
+
+                                <hbox>
+                                        <label text="Durchmesser" font="Helvetica, 16" width="11" />
+                                        <spinbox halpin="probe.durchmesser" width="6" font="Helvetica, 16" min_="0" max_="100" initval="6.0" param_pin="1" format="2.3f"/>
+                                        <label text=" mm" font="Helvetica, 16" />
+                                </hbox>
+
+                                <!-- Platzhalter -->
+                                <label font="Helvetica, 4" text=" " />
+
+                                <hbox>
+                                        <label text="Tastplatte" font="Helvetica, 16" width="11" />
+                                        <spinbox halpin="probe.tastplatte" width="6" font="Helvetica, 16" min_="0" max_="10" initval="3.0" param_pin="1" format="2.3f" />
+                                        <label text=" mm" font="Helvetica, 16" />
+                                </hbox>
+
+                                <!-- Platzhalter -->
+                                <label font="Helvetica, 4" text=" " />
+
+                        </labelframe>
+
+                        <!-- Platzhalter -->
+                        <label font="Helvetica, 4" text=" " />
+
+                        <labelframe text="Antasten gerade ↑" font="Helvetica, 16">
+
+                                <!-- Platzhalter -->
+                                <label font="Helvetica, 4" text=" " />
+
+                                <hbox>
+                                        <!-- Platzhalter -->
+                                        <label font="Helvetica, 12" text="             " />
+
+                                        <button width="3" height="1" padx="5" pady="10" text="" font="Helvetica, 16" activebackground="grey85" relief="flat"/>
+                                        <button halpin="probe.y_plus_gerade" width="3" height="1" padx="5" pady="10" text="Y↑" font="Helvetica, 16" activebackground="red"/>
+                                </hbox>
+                                <hbox>
+                                        <!-- Platzhalter -->
+                                        <label font="Helvetica, 12" text="             " />
+
+                                        <button halpin="probe.x_minus_gerade" width="3" height="1" padx="5" pady="10" text="←X" font="Helvetica, 16" activebackground="red"/>
+                                        <button halpin="probe.z_minus" width="3" height="1" padx="5" pady="10" text="-Z↓" font="Helvetica, 16" activebackground="red"/>
+                                        <button halpin="probe.x_plus_gerade" width="3" height="1" padx="5" pady="10" text="X→" font="Helvetica, 16" activebackground="red"/>
+                                </hbox>
+                                <hbox>
+                                        <!-- Platzhalter -->
+                                        <label font="Helvetica, 12" text="             " />
+
+                                        <button width="3" height="1" padx="5" pady="10" text="" font="Helvetica, 16" activebackground="grey85" relief="flat"/>
+                                        <button halpin="probe.y_minus_gerade" width="3" height="1" padx="5" pady="10" text="Y↓" font="Helvetica, 16" activebackground="red"/>
+                                </hbox>
+
+                                <!-- Platzhalter -->
+                                <label font="Helvetica, 4" text=" " />
+
+                        </labelframe>
+
+                        <!-- Platzhalter -->
+                        <label font="Helvetica, 4" text=" " />
+
+                        <labelframe text="Antasten winkel ↑--↑ ↺" font="Helvetica, 16">
+
+                                <!-- Platzhalter -->
+                                <label font="Helvetica, 4" text=" " />
+
+                                <hbox>
+                                        <!-- Platzhalter -->
+                                        <label font="Helvetica, 12" text="             " />
+
+                                        <button width="3" height="1" padx="5" pady="10" text="" font="Helvetica, 16" activebackground="grey85" relief="flat"/>
+                                        <button halpin="probe.y_plus_winkel" width="3" height="1" padx="5" pady="10" text="Y⇈" font="Helvetica, 16" activebackground="red"/>
+                                </hbox>
+                                <hbox>
+                                        <!-- Platzhalter -->
+                                        <label font="Helvetica, 12" text="             " />
+
+                                        <button halpin="probe.x_minus_winkel" width="3" height="1" padx="5" pady="10" text="⇇X" font="Helvetica, 16" activebackground="red"/>
+                                        <button halpin="probe.rotation_reset" width="3" height="1" padx="5" pady="10" text="↺R0" font="Helvetica, 16" activebackground="green"/>
+                                        <button halpin="probe.x_plus_winkel" width="3" height="1" padx="5" pady="10" text="X⇉" font="Helvetica, 16" activebackground="red"/>
+                                </hbox>
+                                <hbox>
+                                        <!-- Platzhalter -->
+                                        <label font="Helvetica, 12" text="             " />
+
+                                        <button width="3" height="1" padx="5" pady="10" text="" font="Helvetica, 16" activebackground="grey85" relief="flat" />
+                                        <button halpin="probe.y_minus_winkel" width="3" height="1" padx="5" pady="10" text="Y⇊" font="Helvetica, 16" activebackground="red"/>
+                                </hbox>
+
+                                <!-- Platzhalter -->
+                                <label font="Helvetica, 4" text=" " />
+
+                                <hbox>
+                                        <!-- Platzhalter -->
+                                        <label font="Helvetica, 10" text=" " />
+
+                                        <label text="Tastabstand ↑↔↑" font="Helvetica, 14" width="14" />
+                                        <spinbox halpin="probe.tastabstand_winkel" width="4" font="Helvetica, 16" min_="-200" max_="200" initval="20.0" param_pin="1" format="2.0f" />
+                                        <label text=" mm" font="Helvetica, 14" />
+                                </hbox>
+
+                                <!-- Platzhalter -->
+                                <label font="Helvetica, 4" text=" " />
+
+                        </labelframe>
+
+                        <!-- Platzhalter -->
+                        <label font="Helvetica, 4" text=" " />
+
+                        <labelframe text="Status" font="Helvetica, 16">
+                                <hbox>
+                                        <label text="Probe Signal" font="Helvetica, 14" width="20" />
+                                        <rectled halpin="probe.probesignal" width="25" height="25" on_color="#ff3000" off_color="#80b000"/>
+                                </hbox>
+                                <!-- <button halpin="probe.simulation" width="5" padx="5" text="Probesim" font="Helvetica, 16" /> -->
+                        </labelframe>
+
+                </vbox>
+
+                <!-- Input Tab -->
+                <vbox>
+
+                        <!-- Endtaster -->
+                        <labelframe font="Helvetica, 18" text="Endschalter">
+
+
+                                <hbox>
+                                        <label font="Helvetica, 15" text="X-Achse" width="12"/>
+                                        <led halpin="input.limit_x" size="25" on_color="green" off_color="red"/>
+                                </hbox>
+
+                                <hbox>
+                                        <label font="Helvetica, 15" text="Y1-Achse" width="12"/>
+                                        <led halpin="input.limit_y1" size="25" on_color="green" off_color="red"/>
+                                </hbox>
+
+                                <hbox>
+                                        <label font="Helvetica, 15" text="Y2-Achse" width="12"/>
+                                        <led halpin="input.limit_y2" size="25" on_color="green" off_color="red"/>
+                                </hbox>
+
+                                <hbox>
+                                        <label font="Helvetica, 15" text="Z-Achse" width="12"/>
+                                        <led halpin="input.limit_z" size="25" on_color="green" off_color="red"/>
+                                </hbox>
+
+
+
+                        </labelframe>
+
+                        <!-- Platzhalter -->
+                        <label font="Helvetica, 24" text=" " />
+
+                        <!-- Probe -->
+                        <labelframe font="Helvetica, 18" text="Probe-Taster">
+
+                                <hbox>
+                                        <!-- Platzhalter -->
+                                        <label font="Helvetica, 15" text=" " width="12"/>
+
+                                        <led halpin="input.probesignal" size="25" on_color="green" off_color="red"/>
+                                </hbox>
+                        </labelframe>
+
+                        <!-- Platzhalter -->
+                        <label font="Helvetica, 24" text=" " />
+
+                        <!-- Stoptaster -->
+                        <labelframe font="Helvetica, 18" text="STOP-Taster">
+
+                                <hbox>
+                                        <!-- Platzhalter -->
+                                        <label font="Helvetica, 15" text=" " width="12"/>
+
+                                        <led halpin="input.stopsignal" size="25" on_color="green" off_color="red"/>
+                                </hbox>
+
+                        </labelframe>
+
+                        <!-- Platzhalter -->
+                        <label font="Helvetica, 24" text=" " />
+
+                        <!-- MPG Status -->
+                        <labelframe font="Helvetica, 18" text="MPG-Connectionstatus">
+
+                                <hbox>
+                                        <!-- Platzhalter -->
+                                        <label font="Helvetica, 15" text=" " width="12"/>
+
+                                        <led halpin="status.mpg" size="25" on_color="red" off_color="green"/>
+                                </hbox>
+
+                        </labelframe>
+
+                </vbox>
+
+        </tabs>
+</pyvcp>

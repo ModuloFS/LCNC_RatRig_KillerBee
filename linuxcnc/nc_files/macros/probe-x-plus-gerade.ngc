@@ -1,0 +1,35 @@
+O<probe-x-plus-gerade> SUB
+
+#<x_pos_start> = #5420          (startposition merken)
+#<offset> = [#<_hal[pyvcp.probe.tastplatte]>+#<_hal[pyvcp.probe.durchmesser]>/2.0] (offset)
+
+
+M70                                            ( save current modal state )
+M9                                             ( turn off coolant, will be restored on return if it was on )
+M5                                             ( turn off spindle, cannot be on during the probe )
+G21                                             ( use millimeters as required here, units will be restored on return )
+G94                                            ( use feedrate in units/min )
+G40                                             (cutter compensation cancel)
+
+G91                                            ( use increment positioning here )
+
+G38.2 F200 X30     (schnelles antasten)
+G1 F3000 X-2         (2mm zurueckziehen)
+G38.2 F50 X4      (langsames antasten)
+
+o101 if [#5070 EQ 0]
+    G90                 (absolute positionierung)
+    G1 F3000 X#<x_pos_start> (Auf Ursprung zurückfahren)
+    M72
+o101 else
+
+    G90                 (absolute positionierung)
+    G1 F3000 X#<x_pos_start> (Auf Ursprung zurückfahren)
+
+    G10 L20 P0 X[#5420-#5061-#<offset>]    (x-achse nullen, staerke der Tastplatte eintragen)
+
+M72
+
+
+O<probe-x-plus-gerade> ENDSUB
+M2

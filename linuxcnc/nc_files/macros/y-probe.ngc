@@ -1,0 +1,29 @@
+O<y-probe> SUB
+
+
+
+
+#<tastplattendicke> = 3
+
+M70                                            ( save current modal state )
+
+M9                                             ( turn off coolant, will be restored on return if it was on )
+M5                                             ( turn off spindle, cannot be on during the probe )
+G21                                             ( use millimeters as required here, units will be restored on return )
+
+G91                                            ( use increment positioning here )
+G94                                            ( use feedrate in units/min )
+G40 
+
+G38.2 F200 Y30     (schnelles antasten)
+G1 F1000 Y-2         (2mm zurueckziehen)
+G38.2 F50 Y20      (langsames antasten)
+G10 L2 P0 Y[#5061-#<tastplattendicke>]    (X-achse nullen, staerke der Tastplatte eintragen)
+G1 F1000 Y-10        (10 mm neben das Werstueck fahren)
+
+M72
+
+
+
+O<y-probe> ENDSUB
+M2

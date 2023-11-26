@@ -1,0 +1,45 @@
+O<x-angle-probe> SUB
+
+( Filename: x-angle-probe.ngc )
+
+( Misst den winkel des Werkstücks gegenüber der X!! Achse. Somit dwird die X-Achse des Werkstücks zweimal angetastet. gleichzeitig wir die y achse genullt. )
+
+#<tastplattendicke> = 3 (Entspricht Tastplattendicke + Halber werkzeugdurchmesser!)
+
+#<y1_position> = 0.0
+#<y2_position> = 0.0
+#<gegenkatete> = 0.0
+#<ankatete> = 20.0
+
+M70                                            ( save current modal state )
+
+M9                                             ( turn off coolant, will be restored on return if it was on )
+M5                                             ( turn off spindle, cannot be on during the probe )
+G21                                             ( use millimeters as required here, units will be restored on return )
+
+G91                                            ( use increment positioning here )
+G94                                            ( use feedrate in units/min )
+G40 
+
+G38.2 F200 Y30     (schnelles antasten)
+G1 F1000 Y-2         (2mm zurueckziehen)
+G38.2 F50 Y20      (langsames antasten)
+#<y1_position> = #5062    (speichern der ersten y-position)
+G1 F1000 Y-10 (zurückziehen und zur nächsten position fahren)
+G1 F1000 X[#<ankatete>] (um die ankatete, definiert oben, weiter nach rechts fahren und wieder antasten)
+G38.2 F200 Y30     (schnelles antasten)
+G1 F1000 Y-2         (2mm zurueckziehen)
+G38.2 F50 Y20      (langsames antasten)
+
+#<y2_position> = #5062    (speichern der zweiten y-position)
+#<gegenkatete> = #<y1_position>-#<y2_position>
+G10 L2 P0 Y[#5063-#<tastplattendicke>] R[ATAN[#<gegenkatete>]/[#<ankatete>]]
+
+G1 F1000 Y-10 (zurückziehen)
+
+
+M72
+
+
+O<x-angle-probe> ENDSUB
+M2

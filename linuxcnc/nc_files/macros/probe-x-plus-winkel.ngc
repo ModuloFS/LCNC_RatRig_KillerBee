@@ -1,0 +1,102 @@
+O<probe-x-plus-winkel> SUB
+
+( Filename: x-angle-probe.ngc )
+
+( Misst den winkel des Werkstücks gegenüber der X!! Achse. Somit dwird die X-Achse des Werkstücks zweimal angetastet. gleichzeitig wir die y achse genullt. )
+
+#<offset> = [#<_hal[pyvcp.probe.tastplatte]>+#<_hal[pyvcp.probe.durchmesser]>/2] (Entspricht Tastplattendicke + Halber werkzeugdurchmesser!)
+
+#<tastposition_1> = 0.0
+#<tastposition_2> = 0.0
+#<gegenkatete> = 0.0
+#<ankatete> = #<_hal[pyvcp.probe.tastabstand_winkel]>
+
+
+
+M70                                            ( save current modal state )
+
+M9                                             ( turn off coolant, will be restored on return if it was on )
+M5                                             ( turn off spindle, cannot be on during the probe )
+G21                                             ( use millimeters as required here, units will be restored on return )
+
+G10 L2 P0 R0        (rotation zurücksetzten)
+
+#<y_pos_start> = #5421          (startposition merken)
+#<x_pos_start> = #5420          (startposition merken)
+
+G94                                            ( use feedrate in units/min )
+G40 
+G91                                            ( use increment positioning here )
+
+G38.2 F200 X30     (schnelles antasten)
+G1 F3000 X-2         (2mm zurueckziehen)
+G38.2 F50 X4      (langsames antasten)
+
+o100 if [#5070 EQ 0]
+
+    (msg, FEHLER beim ANTASTEN)
+    G90                                            ( use absolute positioning here )
+    G1 F3000 Y[#<y_pos_start>] (zurückziehen auf ausgangsposition)
+    G1 F3000 X[#<x_pos_start>] (zurückziehen auf ausgangsposition)
+    M72
+    O<probe-y-plus-winkel> ENDSUB
+    M2
+
+o100 endif
+
+#<tastposition_1_x> = #5061    (speichern der ersten x-position)
+#<tastposition_1_y> = #5062    (speichern der ersten y-position)
+G90                                            ( use absolute positioning here )
+G1 F3000 X[#<x_pos_start>] (zurückziehen auf ausgangsposition und zur nächsten position fahren)
+G91         (wieder auf inkrementale positionierung umschalten)
+G1 F3000 Y[#<ankatete>] (um die ankatete, definiert oben, weiter nach rechts fahren und wieder antasten)
+G38.2 F200 X30     (schnelles antasten)
+G1 F3000 X-2         (2mm zurueckziehen)
+G38.2 F50 X4      (langsames antasten)
+
+o101 if [#5070 EQ 0]
+
+    (msg, FEHLER beim ANTASTEN)
+    G90                                            ( use absolute positioning here )
+    G1 F3000 Y[#<y_pos_start>] (zurückziehen auf ausgangsposition)
+    G1 F3000 X[#<x_pos_start>] (zurückziehen auf ausgangsposition)
+    M72
+    O<probe-y-plus-winkel> ENDSUB
+    M2
+
+o101 endif
+
+#<tastposition_2_x> = #5061    (speichern der zweiten x-position)
+#<tastposition_2_y> = #5062    (speichern der zweiten y-position)
+
+#<gegenkatete> = [#<tastposition_1_x>-#<tastposition_2_x>]
+
+o102 if [#<ankatete> GE 0] 
+
+    #<winkel> = [ATAN[#<gegenkatete>]/[#<ankatete>]]
+
+o102 else
+
+    #<winkel> = [ATAN[-#<gegenkatete>]/[-#<ankatete>]]
+
+o102 endif
+
+#<korrektur_x> = [TAN[#<winkel>]*#5421+#5420]
+
+G90
+
+G1 F3000 X[#<x_pos_start>] (zurückziehen auf Startposition)
+G1 F3000 Y[#<y_pos_start>] (zurückziehen auf Startposition)
+
+
+
+
+G10 L20 P0 X[#5420-#<korrektur_x>] (zuerst Achse direkt auf Probeposition nullen)
+G10 L2 P0 R#<winkel>                   (Winkel anwenden)
+G10 L20 P0 X[#5420-#<offset>]           (Achse um den Versatz der Tastplatte sowie des Fräsers verschieben)
+
+M72
+
+
+O<probe-x-plus-winkel> ENDSUB
+M2
